@@ -1,6 +1,6 @@
 export function ContactForm() {
   return (
-    <div>
+    <section>
       <div id="form-status"></div>
       <form 
         action="/api/contact"
@@ -19,30 +19,35 @@ export function ContactForm() {
           </article>
         </div>
 
-        <label>
-          Email
-          <input
-            type="email"
-            name="email"
-            placeholder="Your email"
-            required
-          />
-        </label>
+        <fieldset>
+          <label for="email">
+            Email Address
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="your.email@example.com"
+              required
+              autocomplete="email"
+            />
+          </label>
 
-        <label>
-          Message
-          <textarea
-            name="message"
-            placeholder="Your message"
-            rows={5}
-            required
-          />
-        </label>
+          <label for="message">
+            Message
+            <textarea
+              id="message"
+              name="message"
+              placeholder="Tell us what's on your mind..."
+              rows={5}
+              required
+            />
+          </label>
 
-        <button type="submit">
-          Send Message
-        </button>
+          <button type="submit">
+            Send Message
+          </button>
+        </fieldset>
       </form>
-    </div>
+    </section>
   );
 }

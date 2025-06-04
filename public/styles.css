@@ -247,6 +247,16 @@ form {
   border-radius: var(--border-radius);
   padding: 2rem;
   box-shadow: var(--shadow-sm);
+  max-width: 600px;
+}
+
+fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 label {
@@ -264,6 +274,9 @@ input, textarea {
   transition: all 0.2s ease;
   background: var(--surface-color);
   color: var(--text-primary);
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 0.25rem;
 }
 
 input:focus, textarea:focus {
@@ -271,6 +284,13 @@ input:focus, textarea:focus {
   border-color: var(--border-focus);
   box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
   transform: translateY(-1px);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+  font-family: inherit;
+  line-height: 1.5;
 }
 
 button {
@@ -283,6 +303,8 @@ button {
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: var(--shadow-sm);
+  align-self: flex-start;
+  min-width: 140px;
 }
 
 button:hover:not(:disabled) {
@@ -294,6 +316,15 @@ button:hover:not(:disabled) {
 button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* Form status messages */
+#form-status {
+  margin-bottom: 1rem;
+}
+
+#form-status:empty {
+  margin-bottom: 0;
 }
 
 /* Enhanced Lists */
