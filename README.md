@@ -2,7 +2,7 @@
 
 A modern web application demonstrating the power of combining **Mono-JSX**, **HTMX**, and **Deno** for building fast, type-safe, and interactive web applications without complex JavaScript frameworks. 
 
-#### Claude assisted and approved the final code 🚀
+#### Claude knows mono-jsx and HTMX 🚀
 
 ## Quick Start
 
