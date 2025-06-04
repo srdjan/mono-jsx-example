@@ -1,8 +1,10 @@
 # Mono-JSX + HTMX + Deno Demo
 
-A modern web application demonstrating the power of combining **Mono-JSX**, **HTMX**, and **Deno** for building fast, type-safe, and interactive web applications without complex JavaScript frameworks.
+A modern web application demonstrating the power of combining **Mono-JSX**, **HTMX**, and **Deno** for building fast, type-safe, and interactive web applications without complex JavaScript frameworks. 
 
-## 🚀 Quick Start
+#### Claude assisted and approved the final code 🚀
+
+## Quick Start
 
 ```bash
 # Start development server
