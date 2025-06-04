@@ -11,7 +11,7 @@ A modern web application demonstrating the power of combining **Mono-JSX**, **HT
 deno task dev
 
 # Or run directly
-deno serve app.tsx
+deno serve --allow-read app.tsx
 ```
 
 Visit `http://localhost:8000` to see the demo in action.
