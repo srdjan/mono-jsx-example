@@ -62,12 +62,11 @@ interface MonoJSXContext {
 function Header() {
   return (
     <header>
-      <nav class="container">
+      <nav>
         <a href="/" hx-get="/" hx-target="main" hx-push-url="true">Home</a>
         <a href="/posts" hx-get="/posts" hx-target="main" hx-push-url="true">Posts</a>
         <a href="/about" hx-get="/about" hx-target="main" hx-push-url="true">About</a>
         <button 
-          class="btn theme-toggle" 
           type="button"
           hx-post="/api/theme"
           hx-include="closest header"
@@ -96,7 +95,7 @@ function HomePage() {
         This demo showcases server-side rendering with Mono-JSX enhanced with HTMX 
         for modern web interactions without complex JavaScript frameworks.
       </p>
-      <div class="card">
+      <article>
         <h2>Features Demonstrated</h2>
         <ul>
           <li>HTMX-enhanced forms with async submission</li>
@@ -108,8 +107,8 @@ function HomePage() {
           <li>Functional programming patterns</li>
           <li>Type-safe server-side rendering</li>
         </ul>
-      </div>
-      <div class="card">
+      </article>
+      <article>
         <h2>Try the Demo</h2>
         <p>Navigate to different pages to see HTMX in action:</p>
         <ul>
@@ -117,7 +116,7 @@ function HomePage() {
           <li><strong>About</strong> - Try the enhanced contact form</li>
           <li><strong>Theme Toggle</strong> - Click the moon/sun button</li>
         </ul>
-      </div>
+      </article>
     </>
   );
 }
@@ -131,10 +130,10 @@ function PostList() {
       hx-indicator="#posts-loading"
     >
       <div id="posts-loading" class="htmx-indicator">
-        <div class="card">
+        <article>
           <div class="loading" style="display: inline-block; margin-right: 0.5rem;"></div>
           Loading posts...
-        </div>
+        </article>
       </div>
     </div>
   );
@@ -165,10 +164,10 @@ function ContactForm() {
         hx-on--after-request="this.querySelector('button').disabled = false"
       >
         <div id="loading-indicator" class="htmx-indicator">
-          <div class="card">
+          <article>
             <div class="loading" style="display: inline-block; margin-right: 0.5rem;"></div>
             Sending your message...
-          </div>
+          </article>
         </div>
 
         <label>
@@ -191,7 +190,7 @@ function ContactForm() {
           />
         </label>
 
-        <button type="submit" class="btn">
+        <button type="submit">
           Send Message
         </button>
       </form>
@@ -203,7 +202,7 @@ function AboutPage() {
   return (
     <>
       <h1>About This Demo</h1>
-      <div class="card">
+      <article>
         <p>
           This demonstration showcases the power of Mono-JSX for building
           server-side rendered applications with Deno.
@@ -216,7 +215,7 @@ function AboutPage() {
           <li>Result types for explicit error handling</li>
           <li>Streaming SSR for optimal performance</li>
         </ul>
-      </div>
+      </article>
 
       <h2>Contact Us</h2>
       <ContactForm />
@@ -252,9 +251,9 @@ function Router(props: { pathname: string }) {
 function ContactFormStatus(props: { status: string; message?: string }) {
   if (props.status === "sent") {
     return (
-      <div class="card" style="background: #4caf50; color: white;">
+      <article style="background: #4caf50; color: white;">
         ✓ Message sent successfully!
-      </div>
+      </article>
     );
   }
   if (props.status === "error") {
@@ -264,10 +263,10 @@ function ContactFormStatus(props: { status: string; message?: string }) {
   }
   if (props.status === "sending") {
     return (
-      <div class="card">
+      <article>
         <div class="loading" style="display: inline-block; margin-right: 0.5rem;"></div>
         Sending your message...
-      </div>
+      </article>
     );
   }
   return null;
@@ -299,7 +298,7 @@ async function handlePostsLoad(): Promise<Response> {
   return <html><body>
     <div>
       {result.value.map(post => (
-        <article class="card" data-id={post.id}>
+        <article data-id={post.id}>
           <h3>{post.title}</h3>
           <p>{post.content}</p>
           <small>
@@ -333,6 +332,14 @@ export default {
     try {
       const url = new URL(req.url);
       
+      // Serve static CSS file
+      if (req.method === "GET" && url.pathname === "/styles.css") {
+        const css = await Deno.readTextFile("./styles.css");
+        return new Response(css, {
+          headers: { "Content-Type": "text/css" }
+        });
+      }
+      
       // Handle HTMX endpoints
       if (req.method === "POST" && url.pathname === "/api/contact") {
         return await handleContactSubmit(req);
@@ -357,121 +364,7 @@ export default {
             {/* Use a self-closing meta tag with only the name attribute, as mono-jsx does not support 'content' */}
             <meta name="viewport" />
             <title>Mono-JSX + HTMX Demo</title>
-            <style>{css`
-              :root {
-                --bg: #ffffff;
-                --fg: #1a1a1a;
-                --accent: #0066cc;
-                --border: #e0e0e0;
-              }
-              [data-theme="dark"] {
-                --bg: #1a1a1a;
-                --fg: #ffffff;
-                --accent: #4499ff;
-                --border: #333333;
-              }
-              * { box-sizing: border-box; }
-              body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-                line-height: 1.6;
-                color: var(--fg);
-                background: var(--bg);
-                margin: 0;
-                padding: 0;
-                transition: background 0.3s, color 0.3s;
-              }
-              .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 2rem;
-              }
-              header {
-                border-bottom: 1px solid var(--border);
-                padding: 1rem 0;
-                margin-bottom: 2rem;
-              }
-              nav {
-                display: flex;
-                gap: 2rem;
-                align-items: center;
-              }
-              a {
-                color: var(--accent);
-                text-decoration: none;
-                &:hover { text-decoration: underline; }
-              }
-              .btn {
-                padding: 0.5rem 1rem;
-                background: var(--accent);
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 1rem;
-                &:hover { opacity: 0.9; }
-              }
-              .theme-toggle {
-                margin-left: auto;
-                background: transparent;
-                color: var(--fg);
-                border: 1px solid var(--border);
-              }
-              .card {
-                background: var(--bg);
-                border: 1px solid var(--border);
-                border-radius: 8px;
-                padding: 1.5rem;
-                margin-bottom: 1rem;
-                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-              }
-              .loading {
-                display: inline-block;
-                width: 20px;
-                height: 20px;
-                border: 3px solid var(--border);
-                border-radius: 50%;
-                border-top-color: var(--accent);
-                animation: spin 1s ease-in-out infinite;
-              }
-              @keyframes spin {
-                to { transform: rotate(360deg); }
-              }
-              form {
-                display: flex;
-                flex-direction: column;
-                gap: 1rem;
-                max-width: 500px;
-              }
-              input, textarea {
-                padding: 0.5rem;
-                border: 1px solid var(--border);
-                border-radius: 4px;
-                font-size: 1rem;
-                background: var(--bg);
-                color: var(--fg);
-              }
-              .error {
-                color: #ff4444;
-                padding: 1rem;
-                border: 1px solid #ff4444;
-                border-radius: 4px;
-                background: rgba(255, 68, 68, 0.1);
-              }
-              .htmx-indicator {
-                opacity: 0;
-                transition: opacity 0.3s ease;
-              }
-              .htmx-request .htmx-indicator {
-                opacity: 1;
-              }
-              .htmx-request.htmx-indicator {
-                opacity: 1;
-              }
-              [hx-disabled] {
-                opacity: 0.6;
-                pointer-events: none;
-              }
-            `}</style>
+            <link href="/styles.css" type="text/css" />
             <script src="https://unpkg.com/htmx.org@1.9.10"></script>
             <script>{js`
               document.documentElement.setAttribute('data-theme', 
@@ -481,7 +374,7 @@ export default {
           </head>
           <body>
             <Header />
-            <main class="container">
+            <main>
               <Router pathname={url.pathname} />
             </main>
           </body>
