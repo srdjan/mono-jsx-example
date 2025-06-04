@@ -1,6 +1,6 @@
 {
   "tasks": {
-    "dev": "deno serve app.tsx"
+    "dev": "deno serve --allow-read app.tsx"
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@1",

@@ -63,25 +63,32 @@ function Header() {
   return (
     <header>
       <nav>
-        <a href="/" hx-get="/" hx-target="main" hx-push-url="true">Home</a>
-        <a href="/posts" hx-get="/posts" hx-target="main" hx-push-url="true">Posts</a>
-        <a href="/about" hx-get="/about" hx-target="main" hx-push-url="true">About</a>
-        <button 
-          type="button"
-          hx-post="/api/theme"
-          hx-include="closest header"
-          hx-vals='js:{"theme": document.documentElement.getAttribute("data-theme") || "light"}'
-          hx-swap="innerHTML"
-          hx-on--htmx-after-request="
-            const theme = event.detail.xhr.getResponseHeader('HX-Trigger')?.split(':')[1];
-            if (theme) {
-              document.documentElement.setAttribute('data-theme', theme);
-              localStorage.setItem('theme', theme);
-            }
-          "
-        >
-          🌙
-        </button>
+        <ul>
+          <li><a href="/" hx-get="/" hx-target="main" hx-push-url="true">Home</a></li>
+          <li><a href="/posts" hx-get="/posts" hx-target="main" hx-push-url="true">Posts</a></li>
+          <li><a href="/about" hx-get="/about" hx-target="main" hx-push-url="true">About</a></li>
+        </ul>
+        <ul>
+          <li>
+            <button 
+              type="button"
+              class="outline"
+              hx-post="/api/theme"
+              hx-include="closest header"
+              hx-vals='js:{"theme": document.documentElement.getAttribute("data-theme") || "light"}'
+              hx-swap="innerHTML"
+              hx-on--htmx-after-request="
+                const theme = event.detail.xhr.getResponseHeader('HX-Trigger')?.split(':')[1];
+                if (theme) {
+                  document.documentElement.setAttribute('data-theme', theme);
+                  localStorage.setItem('theme', theme);
+                }
+              "
+            >
+              🌙
+            </button>
+          </li>
+        </ul>
       </nav>
     </header>
   );
@@ -251,14 +258,14 @@ function Router(props: { pathname: string }) {
 function ContactFormStatus(props: { status: string; message?: string }) {
   if (props.status === "sent") {
     return (
-      <article style="background: #4caf50; color: white;">
+      <article class="success-message">
         ✓ Message sent successfully!
       </article>
     );
   }
   if (props.status === "error") {
     return (
-      <div class="error">{props.message || "Please fill in all fields"}</div>
+      <article class="error-message">{props.message || "Please fill in all fields"}</article>
     );
   }
   if (props.status === "sending") {
@@ -292,7 +299,7 @@ async function handlePostsLoad(): Promise<Response> {
   const result = await fetchPostsByUser("default");
   
   if (!result.ok) {
-    return <html><body><div class="error">Failed to load posts: {result.error.message}</div></body></html>;
+    return <html><body><article class="error-message">Failed to load posts: {result.error.message}</article></body></html>;
   }
 
   return <html><body>
@@ -361,16 +368,18 @@ export default {
         <html app={{ theme: "light", isLoading: false }}>
           <head>
             <meta charSet="utf-8" />
-            {/* Use a self-closing meta tag with only the name attribute, as mono-jsx does not support 'content' */}
             <meta name="viewport" />
             <title>Mono-JSX + HTMX Demo</title>
-            <link href="/styles.css" type="text/css" />
-            <script src="https://unpkg.com/htmx.org@1.9.10"></script>
-            <script>{js`
-              document.documentElement.setAttribute('data-theme', 
-                localStorage.getItem('theme') || 'light'
-              );
-            `}</script>
+            <style>
+              {`@import url('https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css');`}
+            </style>
+            <style>
+              {await Deno.readTextFile("./styles.css")}
+            </style>
+            <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+            <script>
+              {`document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');`}
+            </script>
           </head>
           <body>
             <Header />
