@@ -13,7 +13,7 @@ export default {
       
       // Serve static CSS file
       if (req.method === "GET" && url.pathname === "/styles.css") {
-        const css = await Deno.readTextFile("./styles.css");
+        const css = await Deno.readTextFile("./public/styles.css");
         return new Response(css, {
           headers: { "Content-Type": "text/css" }
         });
