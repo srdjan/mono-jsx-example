@@ -13,7 +13,7 @@ export default {
       
       // Serve static CSS file
       if (req.method === "GET" && url.pathname === "/styles.css") {
-        const css = await Deno.readTextFile("./styles.css");
+        const css = await Deno.readTextFile("./public/styles.css");
         return new Response(css, {
           headers: { "Content-Type": "text/css" }
         });
@@ -30,7 +30,7 @@ export default {
       // Handle HTMX navigation requests (check for HX-Request header)
       const isHTMXRequest = req.headers.get("HX-Request");
       if (isHTMXRequest) {
-        return <html><body><div><Router pathname={url.pathname} /></div></body></html>;
+        return <Router pathname={url.pathname} />;
       }
       
       return await DefaultLayout({ 
