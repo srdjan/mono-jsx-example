@@ -1,4 +1,4 @@
-import { Header } from "./components/Header.tsx";
+import { DefaultLayout } from "./components/Layout.tsx";
 import { Router } from "./components/Router.tsx";
 import { 
   handleContactSubmit,
@@ -37,31 +37,11 @@ export default {
         return <html><body><div><Router pathname={url.pathname} /></div></body></html>;
       }
       
-      return (
-        <html app={{ theme: "light", isLoading: false }}>
-          <head>
-            <meta charSet="utf-8" />
-            <meta name="viewport" />
-            <title>Mono-JSX + HTMX Demo</title>
-            <style>
-              {`@import url('https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css');`}
-            </style>
-            <style>
-              {await Deno.readTextFile("./public/styles.css")}
-            </style>
-            <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-            <script>
-              {`document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');`}
-            </script>
-          </head>
-          <body>
-            <Header />
-            <main>
-              <Router pathname={url.pathname} />
-            </main>
-          </body>
-        </html>
-      );
+      return await DefaultLayout({ 
+        theme: "light", 
+        isLoading: false,
+        children: <Router pathname={url.pathname} />
+      });
     } catch (err) {
       console.error("SSR error:", err);
       return <html><body><h1>Internal Server Error</h1></body></html>;
