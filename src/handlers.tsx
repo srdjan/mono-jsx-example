@@ -60,27 +60,3 @@ export async function handlePostsLoad(): Promise<Response> {
     </div>
   </body></html>;
 }
-
-export async function handleThemeToggle(req: Request): Promise<Response> {
-  let currentTheme = "light";
-  
-  try {
-    const formData = await req.formData();
-    currentTheme = formData.get("theme") as string || "light";
-  } catch {
-    // Fallback if no form data
-    currentTheme = "light";
-  }
-  
-  const newTheme = currentTheme === "light" ? "dark" : "light";
-  
-  return new Response(
-    newTheme === "light" ? "🌙" : "☀️",
-    { 
-      headers: { 
-        "Content-Type": "text/html",
-        "HX-Trigger": `themeChanged:${newTheme}`
-      } 
-    }
-  );
-}

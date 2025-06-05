@@ -5,21 +5,18 @@ import {
   handlePostsLoad
 } from "./handlers.tsx";
 
-// --- Add error logging to server entry point ---
 export default {
   fetch: async (req: Request) => {
     try {
       const url = new URL(req.url);
       
-      // Serve static CSS file
       if (req.method === "GET" && url.pathname === "/styles.css") {
-        const css = await Deno.readTextFile("./styles.css");
+        const css = await Deno.readTextFile("./public/styles.css");
         return new Response(css, {
           headers: { "Content-Type": "text/css" }
         });
       }
       
-      // Handle HTMX endpoints
       if (req.method === "POST" && url.pathname === "/api/contact") {
         return await handleContactSubmit(req);
       }
@@ -27,13 +24,12 @@ export default {
         return await handlePostsLoad();
       }
       
-      // Handle HTMX navigation requests (check for HX-Request header)
       const isHTMXRequest = req.headers.get("HX-Request");
       if (isHTMXRequest) {
         return <html><body><div><Router pathname={url.pathname} /></div></body></html>;
       }
       
-      return await DefaultLayout({ 
+      return DefaultLayout({ 
         children: <Router pathname={url.pathname} />
       });
     } catch (err) {

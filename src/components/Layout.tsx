@@ -7,18 +7,14 @@ interface LayoutProps {
   isLoading?: boolean;
 }
 
-export async function DefaultLayout({ children, title = "Mono-JSX + HTMX Demo", theme = "light", isLoading = false }: LayoutProps) {
-  const customStyles = await Deno.readTextFile("./public/styles.css");
-  
+export function DefaultLayout({ children, title = "Mono-JSX + HTMX Demo" }: LayoutProps) {
   return (
-    <html app={{ theme, isLoading }}>
+    <html>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" />
         <title>{title}</title>
-        <style>
-          {customStyles}
-        </style>
+        <link rel="stylesheet" href="/styles.css" />
         <script src="https://unpkg.com/htmx.org@2.0.4"></script>
       </head>
       <body>
@@ -31,18 +27,14 @@ export async function DefaultLayout({ children, title = "Mono-JSX + HTMX Demo", 
   );
 }
 
-export async function MinimalLayout({ children, title = "Mono-JSX + HTMX Demo" }: LayoutProps) {
-  const customStyles = await Deno.readTextFile("./public/styles.css");
-  
+export function MinimalLayout({ children, title = "Mono-JSX + HTMX Demo" }: LayoutProps) {
   return (
     <html>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" />
         <title>{title}</title>
-        <style>
-          {customStyles}
-        </style>
+        <link rel="stylesheet" href="/styles.css" />
         <script src="https://unpkg.com/htmx.org@2.0.4"></script>
       </head>
       <body>
