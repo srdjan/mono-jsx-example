@@ -26,7 +26,7 @@ export default {
       
       const isHTMXRequest = req.headers.get("HX-Request");
       if (isHTMXRequest) {
-        return <Router pathname={url.pathname} />;
+        return <html><body><div><Router pathname={url.pathname} /></div></body></html>;
       }
       
       return DefaultLayout({ 
