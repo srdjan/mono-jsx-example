@@ -61,9 +61,17 @@ export async function handlePostsLoad(): Promise<Response> {
   </body></html>;
 }
 
-export function handleThemeToggle(req: Request): Response {
-  const url = new URL(req.url);
-  const currentTheme = url.searchParams.get("theme") || "light";
+export async function handleThemeToggle(req: Request): Promise<Response> {
+  let currentTheme = "light";
+  
+  try {
+    const formData = await req.formData();
+    currentTheme = formData.get("theme") as string || "light";
+  } catch {
+    // Fallback if no form data
+    currentTheme = "light";
+  }
+  
   const newTheme = currentTheme === "light" ? "dark" : "light";
   
   return new Response(

@@ -17,15 +17,9 @@ export async function DefaultLayout({ children, title = "Mono-JSX + HTMX Demo", 
         <meta name="viewport" />
         <title>{title}</title>
         <style>
-          {`@import url('https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css');`}
-        </style>
-        <style>
           {customStyles}
         </style>
         <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-        <script>
-          {`document.documentElement.setAttribute('data-theme', localStorage.getItem('theme') || 'light');`}
-        </script>
       </head>
       <body>
         <Header />
@@ -37,7 +31,9 @@ export async function DefaultLayout({ children, title = "Mono-JSX + HTMX Demo", 
   );
 }
 
-export function MinimalLayout({ children, title = "Mono-JSX + HTMX Demo" }: LayoutProps) {
+export async function MinimalLayout({ children, title = "Mono-JSX + HTMX Demo" }: LayoutProps) {
+  const customStyles = await Deno.readTextFile("./public/styles.css");
+  
   return (
     <html>
       <head>
@@ -45,7 +41,7 @@ export function MinimalLayout({ children, title = "Mono-JSX + HTMX Demo" }: Layo
         <meta name="viewport" />
         <title>{title}</title>
         <style>
-          {`@import url('https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.min.css');`}
+          {customStyles}
         </style>
         <script src="https://unpkg.com/htmx.org@2.0.4"></script>
       </head>

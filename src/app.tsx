@@ -2,8 +2,7 @@ import { DefaultLayout } from "./components/Layout.tsx";
 import { Router } from "./components/Router.tsx";
 import { 
   handleContactSubmit,
-  handlePostsLoad,
-  handleThemeToggle
+  handlePostsLoad
 } from "./handlers.tsx";
 
 // --- Add error logging to server entry point ---
@@ -27,9 +26,6 @@ export default {
       if (req.method === "GET" && url.pathname === "/api/posts") {
         return await handlePostsLoad();
       }
-      if (req.method === "POST" && url.pathname === "/api/theme") {
-        return handleThemeToggle(req);
-      }
       
       // Handle HTMX navigation requests (check for HX-Request header)
       const isHTMXRequest = req.headers.get("HX-Request");
@@ -38,8 +34,6 @@ export default {
       }
       
       return await DefaultLayout({ 
-        theme: "light", 
-        isLoading: false,
         children: <Router pathname={url.pathname} />
       });
     } catch (err) {
